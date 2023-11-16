@@ -169,13 +169,13 @@ public class GUI implements ActionListener {
         double minDistance = 0.48193359375 * golemCount;
         boolean same = false;
 
-        if (Math.abs(dX) < minDistance * 16 && Math.abs(dZ) < minDistance * 16){
-            output = "target is too short\nminimum distance is " + minDistance * 16;
+        if (Math.abs(dX) < minDistance * 16 * 2 && Math.abs(dZ) < minDistance * 16 * 2){
+            output = "target is too short\nminimum distance is " + minDistance * 16 * 2;
             return output;
         }
 
-        if (minDistance * 131072 * 16 *2 < Math.abs(dX) && minDistance * 131072 * 16 * 2 < Math.abs(dZ)){
-            output = "target is too far away\nmaximum distance is " + minDistance * 131072 * 16;
+        if (minDistance * 8191 * 16 * 2 < Math.abs(dX) || minDistance * 8191 * 16 * 2 < Math.abs(dZ)){
+            output = "target is too far away\nmaximum distance is " + minDistance * 8191 * 16 * 2;
             return output;
         }
 
@@ -223,8 +223,20 @@ public class GUI implements ActionListener {
 
         // tickを17bitのバイナリに変換
 
-        String tickBin1 = String.format("%0" + tickWidth + "d", Integer.parseInt(Integer.toBinaryString((int) Math.abs(Math.round(tick1)))));
-        String tickBin2 = String.format("%0" + tickWidth + "d", Integer.parseInt(Integer.toBinaryString((int) Math.abs(Math.round(tick2)))));
+        String tickBin1 = null;
+        String tickBin2 = null;
+
+        try {
+            tickBin1 = String.format("%0" + tickWidth + "d", Long.parseLong(Integer.toBinaryString((int) Math.abs(Math.round(tick1)))));
+            tickBin2 = String.format("%0" + tickWidth + "d", Long.parseLong(Integer.toBinaryString((int) Math.abs(Math.round(tick2)))));
+        } catch(NumberFormatException e){
+            output = "too huge number to calculate";
+            return output;
+        }
+
+        if (17 < tickBin1.length() || 17 < tickBin2.length()){
+
+        }
 
         // バイナリをoptとメインバイナリに分割
 
@@ -251,18 +263,18 @@ public class GUI implements ActionListener {
         int directionNum1 = 0;
         int directionNum2 = 0;
         int itemWidth = 4;
-        int tickWidth = 17;
+        int stackWidth= 2;
         int temp1;
         double minDistance = 0.48193359375 * golemCount;
         boolean same = false;
 
-        if (Math.abs(dX) < minDistance * 8 && Math.abs(dZ) < minDistance * 8){
-            output = "target is too short\nminimum distance is " + minDistance * 8;
+        if (Math.abs(dX) < minDistance * 8 *2 && Math.abs(dZ) < minDistance * 8 * 2){
+            output = "target is too short\nminimum distance is " + minDistance * 8 * 2;
             return output;
         }
 
-        if (minDistance * 1728 * 8 *2 < Math.abs(dX) && minDistance * 1728 * 8 * 2 < Math.abs(dZ)){
-            output = "target is too far away\nmaximum distance is " + minDistance * 1728 * 8;
+        if (minDistance * 1728 * 8 * 2 < Math.abs(dX) || minDistance * 1728 * 8 * 2 < Math.abs(dZ)){
+            output = "target is too far away\nmaximum distance is " + minDistance * 1728 * 8 * 2;
             return output;
         }
 
@@ -285,7 +297,7 @@ public class GUI implements ActionListener {
             same = true;
         }
 
-        // numを入れ替え
+        // numを入れ替え /* created by RS256 */
 
         if (directionNum1 > directionNum2){
             temp1 = directionNum2;
@@ -293,7 +305,7 @@ public class GUI implements ActionListener {
             directionNum1 = temp1;
         }
 
-        // numをdirectionに変換し0埋め
+        // numをdirectionに変換
 
         if (directionNum1 == 1){
             direction1 = "SE";
@@ -327,7 +339,10 @@ public class GUI implements ActionListener {
         String itemCount1 = String.format("% " + itemWidth + "d" , (int) Math.abs(Math.round(tick1 / 8)));
         String itemCount2 = String.format("% " + itemWidth + "d" , (int) Math.abs(Math.round(tick2 / 8)));
 
-        output = "Manual L : " + direction1 + " " + itemCount1 + "\n       R : " + direction2 + " " + itemCount2;
+        String itemStack1 = String.format("% " + stackWidth + "d" , (int) Math.abs(Math.round(tick1 / 8)) / 64) + "st" + String.format("% " + stackWidth + "d" , (int) Math.abs(Math.round(tick1 / 8)) % 64);
+        String itemStack2 = String.format("% " + stackWidth + "d" , (int) Math.abs(Math.round(tick2 / 8)) / 64) + "st" + String.format("% " + stackWidth + "d" , (int) Math.abs(Math.round(tick2 / 8)) % 64);
+
+        output = "Manual L : " + direction1 + " " + itemCount1 + "  (" + itemStack1 + ")" + "\n       R : " + direction2 + " " + itemCount2 + "  (" + itemStack2 + ")";
 
         return output;
     }
