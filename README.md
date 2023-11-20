@@ -11,3 +11,7 @@ That's a magic of minecraft.
 Soon.
 ## how to use this?
 Just look and try.
+## why create the pig cannon?
+My random idea.
+## who invented it?
+Not only us, brilliant mind of Technical Minecraft Community.
