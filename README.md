@@ -3,9 +3,10 @@
 
 The values to be set are easily calculated according to the coordinates where the target, pig cannon exist and the number of golems.
 ## what's the pig cannon?
-A means of transport that makes ultra-long-distance travel in MINECRAFT relatively easy.
-
-> A pig that can't fly is just rubbish, only if it can fly is it fit to be a pig.
+A means of transport that makes ultra-long-distance travel in minecraft relatively easy.
+> Pig is gotta fly, only if it can fly is it fit to be a pig.
+## when pig fly!
+That's a magic of minecraft. 
 ## where can I find it?
 Soon.
 ## how to use this?
