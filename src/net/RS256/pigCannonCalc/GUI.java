@@ -246,7 +246,7 @@ public class GUI implements ActionListener {
         tickBin1 = tickBin1.substring(0, tickBin1.length() - 4);
         tickBin2 = tickBin2.substring(0, tickBin2.length() - 4);
 
-        output = "Binary -" + direction1 + "-" + tickBin1 + "-" + opt1 + "-\n       -" + direction2 + "-" + tickBin2 + "-" + opt2 + "-";
+        output = "Binary -" + opt1 + "-" + tickBin1 + "-" + direction1 + "-\n       -" + opt2 + "-" + tickBin2 + "-" + direction2 + "-";
 
         return output;
     }
