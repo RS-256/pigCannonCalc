@@ -3,6 +3,8 @@ package net.RS256.pigCannonCalc;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import javax.swing.*;
 
 public class GUI implements ActionListener {
@@ -216,6 +218,12 @@ public class GUI implements ActionListener {
         double tick1 = (dX + dZ) / (2 * minDistance);
         double tick2 = (dX - dZ) / (2 * minDistance);
 
+        // 着地点の概算
+
+        double finalX = (Math.round(tick1) + Math.round(tick2)) * minDistance + initialX;
+        double finalZ = (Math.round(tick1) - Math.round(tick2)) * minDistance + initialZ;
+        String finalCoord = "(" + finalX + "," + finalZ + ")";
+
         if (same == true){
             tick1 = tick1 / 2;
             tick2 = tick1;
@@ -223,8 +231,8 @@ public class GUI implements ActionListener {
 
         // tickを17bitのバイナリに変換
 
-        String tickBin1 = null;
-        String tickBin2 = null;
+        String tickBin1;
+        String tickBin2;
 
         try {
             tickBin1 = String.format("%0" + tickWidth + "d", Long.parseLong(Integer.toBinaryString((int) Math.abs(Math.round(tick1)))));
@@ -232,10 +240,6 @@ public class GUI implements ActionListener {
         } catch(NumberFormatException e){
             output = "too huge number to calculate";
             return output;
-        }
-
-        if (17 < tickBin1.length() || 17 < tickBin2.length()){
-
         }
 
         // バイナリをoptとメインバイナリに分割
@@ -246,7 +250,7 @@ public class GUI implements ActionListener {
         tickBin1 = tickBin1.substring(0, tickBin1.length() - 4);
         tickBin2 = tickBin2.substring(0, tickBin2.length() - 4);
 
-        output = "Binary -" + opt1 + "-" + tickBin1 + "-" + direction1 + "-\n       -" + opt2 + "-" + tickBin2 + "-" + direction2 + "-";
+        output = "Binary -" + opt1 + "-" + tickBin1 + "-" + direction1 + "-\n       -" + opt2 + "-" + tickBin2 + "-" + direction2 + "-\nCoord : " + finalCoord;
 
         return output;
     }
@@ -331,6 +335,12 @@ public class GUI implements ActionListener {
         double tick1 = (dX + dZ) / (2 * minDistance);
         double tick2 = (dX - dZ) / (2 * minDistance);
 
+        // 着地点の概算
+
+        double finalX = (Math.round(tick1 / 8) + Math.round(tick2 / 8)) * minDistance * 8 + initialX;
+        double finalZ = (Math.round(tick1 / 8) - Math.round(tick2 / 8)) * minDistance * 8 + initialZ;
+        String finalCoord = "(" + finalX + "," + finalZ + ")";
+
         if (same == true){
             tick1 = tick1 / 2;
             tick2 = tick1;
@@ -342,7 +352,7 @@ public class GUI implements ActionListener {
         String itemStack1 = String.format("% " + stackWidth + "d" , (int) Math.abs(Math.round(tick1 / 8)) / 64) + "st" + String.format("% " + stackWidth + "d" , (int) Math.abs(Math.round(tick1 / 8)) % 64);
         String itemStack2 = String.format("% " + stackWidth + "d" , (int) Math.abs(Math.round(tick2 / 8)) / 64) + "st" + String.format("% " + stackWidth + "d" , (int) Math.abs(Math.round(tick2 / 8)) % 64);
 
-        output = "Manual L : " + direction1 + " " + itemCount1 + "  (" + itemStack1 + ")" + "\n       R : " + direction2 + " " + itemCount2 + "  (" + itemStack2 + ")";
+        output = "Manual L : " + direction1 + " " + itemCount1 + "  (" + itemStack1 + ")" + "\n       R : " + direction2 + " " + itemCount2 + "  (" + itemStack2 + ")" + "\ncoord : " + finalCoord;
 
         return output;
     }
