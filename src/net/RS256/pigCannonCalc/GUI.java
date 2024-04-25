@@ -3,6 +3,7 @@ package net.RS256.pigCannonCalc;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 import javax.swing.*;
 
 public class GUI implements ActionListener {
@@ -105,7 +106,8 @@ public class GUI implements ActionListener {
         int initialZ;
         int targetX;
         int targetZ;
-        int minDistance = 9;
+        double minDistance = 3.810316813535;
+        //double minDistance = 7.62063362707;
 
         try {
             initialX = Integer.parseInt(this.initialXInput.getText());
@@ -121,7 +123,7 @@ public class GUI implements ActionListener {
         this.ROM.setText(ROMCalculate(initialX, initialZ, targetX, targetZ, minDistance));
     }
 
-    private static String ROMCalculate(int initialX, int initialZ, int targetX, int targetZ, int minDistance) {
+    private static String ROMCalculate(int initialX, int initialZ, int targetX, int targetZ, double minDistance) {
 
         int dX = targetX - initialX;
         int dZ = targetZ - initialZ;
@@ -130,7 +132,8 @@ public class GUI implements ActionListener {
 
         int[] tick = calc.calcTick(dX, dZ, minDistance);
         String[] formattedOutput = calc.tickToFormattedString(tick);
-        int[] estimatedTarget = calc.estimateTarget(tick, initialX, initialZ, minDistance);
+        double[] estimatedTarget = calc.estimateTarget(tick, initialX, initialZ, minDistance);
+
         return "-" + direction[0]
                 + "-" + formattedOutput[0]
                 + "-" + formattedOutput[1]
