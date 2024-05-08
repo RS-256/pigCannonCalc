@@ -3,6 +3,7 @@ package net.RS256.pigCannonCalc;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 import javax.swing.*;
 
 public class GUI implements ActionListener {
@@ -26,7 +27,7 @@ public class GUI implements ActionListener {
 
     public GUI() {
         this.panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
-        this.panel.setLayout((LayoutManager) null);
+        this.panel.setLayout(null);
         Font MonospaceFont = new Font("consolas", Font.PLAIN, 14);
 
         // initial X の表示
@@ -98,39 +99,48 @@ public class GUI implements ActionListener {
         this.frame.setResizable(false);
         this.frame.setSize(345, 455);
         this.frame.setVisible(true);
+
     }
 
     public void actionPerformed(ActionEvent actionEvent) {
-        int initialX;
-        int initialZ;
-        int targetX;
-        int targetZ;
-        int minDistance = 9;
-
+        int[] initialPos = new int[2];
+        int[] targetPos = new int[2];
+        double minDistance = 4.350125945; // magic number
         try {
-            initialX = Integer.parseInt(this.initialXInput.getText());
-            initialZ = Integer.parseInt(this.initialZInput.getText());
-            targetX = Integer.parseInt(this.targetXInput.getText());
-            targetZ = Integer.parseInt(this.targetZInput.getText());
+
+            initialPos[0] = Integer.parseInt(this.initialXInput.getText());
+            initialPos[1] = Integer.parseInt(this.initialZInput.getText());
+            targetPos[0] = Integer.parseInt(this.targetXInput.getText());
+            targetPos[1] = Integer.parseInt(this.targetZInput.getText());
         }
         catch (Exception var11) {
             this.ROM.setText("Illegal argument");
             return;
         }
 
-        this.ROM.setText(ROMCalculate(initialX, initialZ, targetX, targetZ, minDistance));
+        //checker
+        if(initialPos[0] == 0) {
+            initialPos[0] = 253;
+            initialPos[1] = -1474;
+            targetPos[0] = 0;
+            targetPos[1] = 0;
+        }
+
+        this.ROM.setText(ROMCalculate(initialPos, targetPos, minDistance));
     }
 
-    private static String ROMCalculate(int initialX, int initialZ, int targetX, int targetZ, int minDistance) {
+    private static String ROMCalculate(int[] initialPos, int[] targetPos, double minDistance) {
 
-        int dX = targetX - initialX;
-        int dZ = targetZ - initialZ;
+        int dX = targetPos[0] - initialPos[0];
+        int dZ = targetPos[1] - initialPos[1];
 
         String[] direction = calc.calcDirection(dX, dZ);
 
         int[] tick = calc.calcTick(dX, dZ, minDistance);
         String[] formattedOutput = calc.tickToFormattedString(tick);
-        int[] estimatedTarget = calc.estimateTarget(tick, initialX, initialZ, minDistance);
+        int[] estimatedTarget = calc.estimateTarget(tick, initialPos, minDistance);
+        double[] estimatedMotion = calc.calcMotion(tick);
+
         return "-" + direction[0]
                 + "-" + formattedOutput[0]
                 + "-" + formattedOutput[1]
@@ -141,6 +151,8 @@ public class GUI implements ActionListener {
                 + "-" + formattedOutput[5]
                 + "-\n\nestimated target:\n(" + estimatedTarget[0]
                 + ", " + estimatedTarget[1]
-                + ")";
+                + ")\nestimated motion :\n"
+                + Arrays.toString(estimatedMotion)
+                ;
     }
 }
